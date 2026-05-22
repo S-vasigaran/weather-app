@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather App</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+      }
+
+      .container {
+        text-align: center;
+        width: 100%;
+        max-width: 480px;
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        margin-bottom: 30px;
+        letter-spacing: 2px;
+      }
+
+      .search-box {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 30px;
+      }
+
+      .search-box input {
+        flex: 1;
+        padding: 14px 20px;
+        border-radius: 50px;
+        border: none;
+        font-size: 1rem;
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        outline: none;
+      }
+
+      .search-box input::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .search-box button {
+        padding: 14px 24px;
+        border-radius: 50px;
+        border: none;
+        background: #e94560;
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .search-box button:hover {
+        background: #c73652;
+      }
+
+      .weather-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px 30px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .city-name {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .country {
+        font-size: 1rem;
+        opacity: 0.7;
+        margin-bottom: 20px;
+      }
+
+      .temp {
+        font-size: 4rem;
+        font-weight: bold;
+        margin: 10px 0;
+      }
+
+      .description {
+        font-size: 1.2rem;
+        text-transform: capitalize;
+        opacity: 0.85;
+        margin-bottom: 30px;
+      }
+
+      .details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .detail-box {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 15px;
+      }
+
+      .detail-box .label {
+        font-size: 0.75rem;
+        opacity: 0.6;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 5px;
+      }
+
+      .detail-box .value {
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🌤 Weather App</h1>
+
+      <form method="POST" class="search-box">
+        <input
+          type="text"
+          name="city"
+          placeholder="Enter city name..."
+          required
+        />
+        <button type="submit">Search</button>
+      </form>
+
+      {% if weather %}
+      <div class="weather-card">
+        <div class="city-name">{{ weather.name }}</div>
+        <div class="country">{{ weather.sys.country }}</div>
+        <div class="temp">{{ weather.main.temp | round(1) }}°C</div>
+        <div class="description">{{ weather.weather[0].description }}</div>
+
+        <div class="details">
+          <div class="detail-box">
+            <div class="label">Feels Like</div>
+            <div class="value">{{ weather.main.feels_like | round(1) }}°C</div>
+          </div>
+          <div class="detail-box">
+            <div class="label">Humidity</div>
+            <div class="value">{{ weather.main.humidity }}%</div>
+          </div>
+          <div class="detail-box">
+            <div class="label">Wind Speed</div>
+            <div class="value">{{ weather.wind.speed }} m/s</div>
+          </div>
+          <div class="detail-box">
+            <div class="label">Pressure</div>
+            <div class="value">{{ weather.main.pressure }} hPa</div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>
