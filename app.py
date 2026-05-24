@@ -1,7 +1,12 @@
 from flask import Flask, render_template, request
+from datetime import datetime
 import weather_app as wa
 
 app = Flask(__name__)
+
+@app.template_filter('datefmt')
+def datefmt(date_str):
+    return datetime.strptime(date_str, "%Y-%m-%d").strftime("%a, %d %b")
 
 @app.route("/", methods=["GET", "POST"])
 def index():
