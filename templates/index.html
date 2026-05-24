@@ -4,143 +4,240 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Weather App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+      :root {
+        --bg: #0a0e1a;
+        --card: rgba(255,255,255,0.06);
+        --card-border: rgba(255,255,255,0.12);
+        --accent: #4fc3f7;
+        --accent2: #e94560;
+        --text: #f0f4ff;
+        --muted: rgba(240,244,255,0.5);
       }
 
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+
       body {
-        font-family: "Segoe UI", sans-serif;
-        background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+        font-family: 'DM Sans', sans-serif;
+        background: var(--bg);
         min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
+        color: var(--text);
+        padding: 30px 16px 60px;
+        background-image:
+          radial-gradient(ellipse at 20% 20%, rgba(79,195,247,0.08) 0%, transparent 60%),
+          radial-gradient(ellipse at 80% 80%, rgba(233,69,96,0.08) 0%, transparent 60%);
       }
 
       .container {
-        text-align: center;
-        width: 100%;
-        max-width: 480px;
-        padding: 20px;
+        max-width: 520px;
+        margin: 0 auto;
       }
 
       h1 {
-        font-size: 2.5rem;
-        margin-bottom: 30px;
+        font-family: 'Space Mono', monospace;
+        font-size: clamp(1.4rem, 5vw, 2rem);
         letter-spacing: 2px;
+        text-align: center;
+        margin-bottom: 28px;
+        color: var(--accent);
       }
 
       .search-box {
         display: flex;
         gap: 10px;
-        margin-bottom: 30px;
+        margin-bottom: 28px;
       }
 
       .search-box input {
         flex: 1;
         padding: 14px 20px;
         border-radius: 50px;
-        border: none;
+        border: 1px solid var(--card-border);
         font-size: 1rem;
-        background: rgba(255, 255, 255, 0.15);
-        color: white;
+        font-family: 'DM Sans', sans-serif;
+        background: var(--card);
+        color: var(--text);
         outline: none;
+        transition: border-color 0.2s;
       }
 
-      .search-box input::placeholder {
-        color: rgba(255, 255, 255, 0.6);
+      .search-box input:focus {
+        border-color: var(--accent);
       }
+
+      .search-box input::placeholder { color: var(--muted); }
 
       .search-box button {
-        padding: 14px 24px;
+        padding: 14px 22px;
         border-radius: 50px;
         border: none;
-        background: #e94560;
+        background: var(--accent2);
         color: white;
         font-size: 1rem;
+        font-family: 'DM Sans', sans-serif;
+        font-weight: 600;
         cursor: pointer;
-        font-weight: bold;
+        transition: background 0.2s, transform 0.1s;
+        white-space: nowrap;
       }
 
-      .search-box button:hover {
-        background: #c73652;
-      }
+      .search-box button:hover { background: #c73652; }
+      .search-box button:active { transform: scale(0.97); }
 
+      /* Current weather card */
       .weather-card {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 40px 30px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: var(--card);
+        backdrop-filter: blur(16px);
+        border-radius: 24px;
+        padding: 32px 24px;
+        border: 1px solid var(--card-border);
+        margin-bottom: 20px;
+        text-align: center;
+        animation: fadeUp 0.4s ease;
       }
 
       .city-name {
-        font-size: 2rem;
-        font-weight: bold;
-        margin-bottom: 5px;
+        font-family: 'Space Mono', monospace;
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-bottom: 4px;
       }
 
       .country {
-        font-size: 1rem;
-        opacity: 0.7;
-        margin-bottom: 20px;
+        font-size: 0.9rem;
+        color: var(--muted);
+        margin-bottom: 16px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
       }
 
       .temp {
-        font-size: 4rem;
-        font-weight: bold;
-        margin: 10px 0;
+        font-family: 'Space Mono', monospace;
+        font-size: clamp(3rem, 12vw, 4.5rem);
+        font-weight: 700;
+        color: var(--accent);
+        line-height: 1;
+        margin-bottom: 8px;
       }
 
       .description {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
+        color: var(--muted);
         text-transform: capitalize;
-        opacity: 0.85;
-        margin-bottom: 30px;
+        margin-bottom: 24px;
       }
 
       .details {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 15px;
-        margin-top: 20px;
+        gap: 12px;
       }
 
       .detail-box {
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 12px;
-        padding: 15px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 14px;
+        padding: 14px 12px;
+        border: 1px solid var(--card-border);
       }
 
       .detail-box .label {
-        font-size: 0.75rem;
-        opacity: 0.6;
+        font-size: 0.7rem;
+        color: var(--muted);
         text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 5px;
+        letter-spacing: 1.5px;
+        margin-bottom: 6px;
       }
 
       .detail-box .value {
-        font-size: 1.2rem;
-        font-weight: bold;
+        font-family: 'Space Mono', monospace;
+        font-size: 1.1rem;
+        font-weight: 700;
+      }
+
+      /* Forecast section */
+      .forecast-title {
+        font-family: 'Space Mono', monospace;
+        font-size: 0.85rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 12px;
+        padding-left: 4px;
+      }
+
+      .forecast-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        animation: fadeUp 0.5s ease;
+      }
+
+      .forecast-card {
+        background: var(--card);
+        border: 1px solid var(--card-border);
+        border-radius: 16px;
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        transition: background 0.2s;
+      }
+
+      .forecast-card:hover {
+        background: rgba(255,255,255,0.09);
+      }
+
+      .forecast-day {
+        font-family: 'Space Mono', monospace;
+        font-size: 0.85rem;
+        font-weight: 700;
+        min-width: 90px;
+        color: var(--accent);
+      }
+
+      .forecast-desc {
+        flex: 1;
+        font-size: 0.85rem;
+        color: var(--muted);
+        text-transform: capitalize;
+        text-align: center;
+      }
+
+      .forecast-right {
+        text-align: right;
+      }
+
+      .forecast-temp {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.1rem;
+        font-weight: 700;
+      }
+
+      .forecast-humidity {
+        font-size: 0.75rem;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      @media (max-width: 400px) {
+        .forecast-desc { display: none; }
+        .forecast-day { min-width: 70px; font-size: 0.75rem; }
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <h1>🌤 Weather App</h1>
+      <h1>🌤 WEATHER</h1>
 
       <form method="POST" class="search-box">
-        <input
-          type="text"
-          name="city"
-          placeholder="Enter city name..."
-          required
-        />
+        <input type="text" name="city" placeholder="Enter city name..." required />
         <button type="submit">Search</button>
       </form>
 
@@ -150,7 +247,6 @@
         <div class="country">{{ weather.sys.country }}</div>
         <div class="temp">{{ weather.main.temp | round(1) }}°C</div>
         <div class="description">{{ weather.weather[0].description }}</div>
-
         <div class="details">
           <div class="detail-box">
             <div class="label">Feels Like</div>
@@ -171,6 +267,29 @@
         </div>
       </div>
       {% endif %}
+
+      {% if forecast %}
+      <div class="forecast-title">📅 5-Day Forecast</div>
+      <div class="forecast-grid">
+        {% set seen = namespace(dates=[]) %}
+        {% for entry in forecast.list %}
+          {% set date = entry.dt_txt.split(' ')[0] %}
+          {% set hour = entry.dt_txt.split(' ')[1].split(':')[0] | int %}
+          {% if date not in seen.dates and hour == 12 %}
+            {% set _ = seen.dates.append(date) %}
+            <div class="forecast-card">
+              <div class="forecast-day">{{ date | datefmt }}</div>
+              <div class="forecast-desc">{{ entry.weather[0].description }}</div>
+              <div class="forecast-right">
+                <div class="forecast-temp">{{ entry.main.temp | round(1) }}°C</div>
+                <div class="forecast-humidity">💧 {{ entry.main.humidity }}%</div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      {% endif %}
+
     </div>
   </body>
 </html>
